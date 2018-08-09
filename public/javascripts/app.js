@@ -13,7 +13,6 @@ angular.module('nodeTodo', [])
   // Create a new todo
 $scope.createItem = function()
 {
-  alert($scope.formitem);
     $http.post('/api/v1/todos', $scope.formitem)
     .success((data) => {
       $scope.formitem = {};
