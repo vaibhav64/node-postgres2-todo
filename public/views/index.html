@@ -1,37 +1,83 @@
 <!DOCTYPE html>
-<html ng-app="nodeTodo">
-  <head>
-    <title>Todo App - with Node + Express + Angular + MongoDB</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" ng-app="nodeTodo">
+<head>
+  <title>Local Mart Application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="/stylesheets/style.css" media="screen">
+  <meta charset="utf-8">  
   </head>
-  <body ng-controller="mainController">
-      <script src="//code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-      <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
-      <script src="javascripts/app.js"></script>
-    <div class="container">
-      <div class="header">
-        <h1>Todo App</h1>
-        <hr>
-        <h1 class="lead">Node + Express + Angular + MongoDB</h1>
-      </div>
-      <div class="todo-form">
+<body ng-controller = "mainController">
+  <script src="//code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
+  <script src="javascripts/app.js"></script>
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>Desi Dukan</h1>      
+    <p>Unchey Daam & feeke pakwaan</p>
+  </div>
+</div>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Deals</a></li>
+        <li><a href="#">Stores</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">    
+    <div class="items-form">
         <form>
           <div class="form-group">
-            <input type="text" class="form-control input-lg" placeholder="Enter text..." ng-model="formData.text">
+            {{formitem.description}}--{{formitem.offer}}
+            <input type="text" class="form-control input-lg" placeholder="Enter description..." ng-model="formitem.description">
+            <input type="text" class="form-control input-lg" placeholder="Enter offer..." ng-model="formitem.offer">
           </div>
-          <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="createTodo()">Add Todo</button>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" ng-click="createItem()">Add Item</button>
         </form>
       </div>
-      <br>
-      <div class="todo-list">
-        <ul ng-repeat="todo in todoData">
-          <li><h3><input class="lead" type="checkbox" ng-click="deleteTodo(todo.text)">&nbsp;{{ todo.text }}</h3></li><hr>
-        </ul>
+</div>
+<br><br>
+ 
+<div class="container">    
+  <div class="row">
+    <div class="col-sm-4" ng-repeat="item in items">
+      <div class="panel panel-primary">
+        <div class="panel-heading">{{item.description}}</div>
+        <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
+        <div class="panel-footer">{{item.offer}}</div>
       </div>
-    </div>
-    
-  </body>
+    </div>    
+  </div>
+</div>
+<br><br>
+
+<footer class="container-fluid text-center">
+  <p>Online Store Copyright</p>  
+  <form class="form-inline">Get deals:
+    <input type="email" class="form-control" size="50" placeholder="Email Address">
+    <button type="button" class="btn btn-danger">Sign Up</button>
+  </form>
+</footer>
+
+</body>
 </html>

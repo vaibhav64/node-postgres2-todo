@@ -1,95 +1,46 @@
 var express = require('express');
 var router = express.Router();
 const path = require('path');
-const MongoClient = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
 const assert = require('assert');
-// Connection URL
-const url = 'mongodb://localhost:27017';
-// Database Name
-const dbName = 'TodoApp';
+var Item   = require('../models/item'); // get our mongoose model
+var config = require('../config'); // get our config file
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+
+mongoose.connect(config.database);
 
 router.get('/', (req, res, next) => {
   console.log(__dirname);
-  res.sendFile(path.join(
-    __dirname,'..','public','views','index.html'));
+  res.sendFile(path.join(__dirname,'..','public','views','index.html'));
 });
 
 router.get('/api/v1/todos', (req, res, next) => {
-
-  // Use connect method to connect to the server
-  MongoClient.connect(url, function(err, client) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-  const db = client.db(dbName);   
-  findDocuments(db, function(docs) {
-    return res.json(docs);
-    client.close();
-   });  
-   });
+  Item.find({}, function(err, items) {
+    console.log(items);
+    return res.json(items);
+  });
 });
-
 router.post('/api/v1/todos', (req, res, next) => {
- // Grab data from http request
-  const data = {text: req.body.text, complete: false};
- // Use connect method to connect to the server
-  MongoClient.connect(url, function(err, client) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server"); 
-  const db = client.db(dbName); 
-  insertDocuments(db,data, function() {
-    findDocuments(db, function(docs) {
-      return res.json(docs);
-      client.close();
+ // create a sample task
+ console.log(req.body);
+ var nick = new Item({ 
+  description: req.body.description, 
+  offer: req.body.offer  
     });
-  });
-});  
-});
-router.delete('/api/v1/todos/:todo_id', (req, res, next) => {
-  const results = [];
-  // Grab data from the URL parameters
-  const id = req.params.todo_id;
-  console.log("ID......."+id);
-  // Get a Postgres client from the connection pool
-  MongoClient.connect(url, function(err, client) {
-    assert.equal(null, err);
-    console.log("Connected successfully to server");   
-    const db = client.db(dbName);   
-       removeDocument(db,id,function() {
-        findDocuments(db, function(docs) {
-          return res.json(docs);
-          client.close();
-        });
-        });    
-  });
+nick.save(function(err) {
+  if (err) throw err;
+  console.log('Task saved successfully');
+  Item.find({}, function(err, items) {
+    console.log(items);
+  return res.json(items);
+  });  
+}); 
+
 });
 
-const findDocuments = function(db, callback) {
-  // Get the documents collection
-  const collection = db.collection('Todos');  
-  // Find some documents
-  collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    console.log(docs)
-    callback(docs);
-  });
-};
-
-const insertDocuments = function(db,data, callback) {
-  // Get the documents collection
-  const collection = db.collection('Todos');
-  // Insert some documents
-  collection.insertMany([
-    {text : data.text, complete : data.complete}
-  ], function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted new todo into the collection");
-    callback(result);
-  });
-}
 const removeDocument = function(db,data,callback) {
   // Get the documents collection
-  const collection = db.collection('Todos');
+  const collection = db.collection('todoapp');
   // Delete document where a is 3
   collection.deleteOne({"text" : data}, function(err, result) {
     assert.equal(err, null);
@@ -97,46 +48,21 @@ const removeDocument = function(db,data,callback) {
     callback(result);
   });    
 }
+
+router.delete('/api/v1/todos/:todo_id', (req, res, next) => {
+  const results = [];
+  // Grab data from the URL parameters
+  const id = req.params.todo_id;
+  console.log("ID......."+id);
+  MongoClient.connect(url,{ useNewUrlParser: true },function(err, db) {
+    if (err) throw err;
+    console.log("Connected successfully to server");   
+        removeDocument(db,id,function() {
+        findDocuments(db, function(docs) {
+          return res.json(docs);
+          client.close();
+        });
+        });    
+  });
+});
 module.exports = router;
-// router.put('/api/v1/todos/:todo_id', (req, res, next) => {
-//   const results = [];
-//   // Grab data from the URL parameters
-//   const id = req.params.todo_id;
-//   // Grab data from http request
-//   const data = {text: req.body.text, complete: req.body.complete};
-//   // Get a Postgres client from the connection pool
-//   pool.connect(connectionString, (err, client, done) => {
-//     // Handle connection errors
-//     if(err) {
-//       done();
-//       console.log(err);
-//       return res.status(500).json({success: false, data: err});
-//     }
-//     // SQL Query > Update Data
-//     client.query('UPDATE items SET text=($1), complete=($2) WHERE id=($3)',
-//     [data.text, data.complete, id],(err,resp)=>{
-//       if(err){
-//         console.log(err);
-//          }
-//       else{
-//           // SQL Query > Select Data
-//           client.query("SELECT * FROM items ORDER BY id ASC",(err,resp)=>{
-//             if(err){
-//               console.log(err.stack);
-//             }
-//             else{
-//               // Stream results back one row at a time
-//               results.push(resp.row);
-//             }
-//             done();
-//             // After all data is returned, close connection and return results
-//             return res.json(results);
-//           }); 
-//       }
-//     });
-    
-//   });
-// });
-
-
-

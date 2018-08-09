@@ -1,24 +1,25 @@
 angular.module('nodeTodo', [])
 .controller('mainController', ($scope, $http) => {
-  $scope.formData = {};
-  $scope.todoData = {};
+  $scope.formitem = {};
+  $scope.items = {};
   // Get all todos
   $http.get('/api/v1/todos')
   .success((data) => {
     console.log(data);
-    $scope.todoData = data;
+    $scope.items = data;
     console.log(data);
   })
   .error((error) => {
     console.log('Error: ' + error);
   });
   // Create a new todo
-$scope.createTodo = () => {
-  console.log($scope.formData);
-    $http.post('/api/v1/todos', $scope.formData)
+$scope.createItem = function()
+{
+  alert($scope.formitem);
+    $http.post('/api/v1/todos', $scope.formitem)
     .success((data) => {
-      $scope.formData = {};
-      $scope.todoData = data;
+      $scope.formitem = {};
+      $scope.items = data;
       console.log(data);
     })
     .error((error) => {
@@ -26,7 +27,7 @@ $scope.createTodo = () => {
     });
   };
   // Delete a todo
-  $scope.deleteTodo = (todoID) => {
+  $scope.deleteTodo = function(todoID){
     $http.delete('/api/v1/todos/' + todoID)
     .success((data) => {
       $scope.todoData = data;
