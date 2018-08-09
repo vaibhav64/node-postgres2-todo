@@ -38,16 +38,16 @@ nick.save(function(err) {
 
 });
 
-const removeDocument = function(db,data,callback) {
-  // Get the documents collection
-  const collection = db.collection('todoapp');
-  // Delete document where a is 3
-  collection.deleteOne({"text" : data}, function(err, result) {
-    assert.equal(err, null);
-    console.log("Removed the todo item");
-    callback(result);
-  });    
-}
+// const removeDocument = function(db,data,callback) {
+//   // Get the documents collection
+//   const collection = db.collection('todoapp');
+//   // Delete document where a is 3
+//   collection.deleteOne({"text" : data}, function(err, result) {
+//     assert.equal(err, null);
+//     console.log("Removed the todo item");
+//     callback(result);
+//   });    
+// }
 
 // router.delete('/api/v1/todos/:todo_id', (req, res, next) => {
 //   const results = [];
