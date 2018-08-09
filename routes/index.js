@@ -49,20 +49,20 @@ const removeDocument = function(db,data,callback) {
   });    
 }
 
-router.delete('/api/v1/todos/:todo_id', (req, res, next) => {
-  const results = [];
-  // Grab data from the URL parameters
-  const id = req.params.todo_id;
-  console.log("ID......."+id);
-  MongoClient.connect(url,{ useNewUrlParser: true },function(err, db) {
-    if (err) throw err;
-    console.log("Connected successfully to server");   
-        removeDocument(db,id,function() {
-        findDocuments(db, function(docs) {
-          return res.json(docs);
-          client.close();
-        });
-        });    
-  });
-});
+// router.delete('/api/v1/todos/:todo_id', (req, res, next) => {
+//   const results = [];
+//   // Grab data from the URL parameters
+//   const id = req.params.todo_id;
+//   console.log("ID......."+id);
+//   MongoClient.connect(url,{ useNewUrlParser: true },function(err, db) {
+//     if (err) throw err;
+//     console.log("Connected successfully to server");   
+//         removeDocument(db,id,function() {
+//         findDocuments(db, function(docs) {
+//           return res.json(docs);
+//           client.close();
+//         });
+//         });    
+//   });
+// });
 module.exports = router;
