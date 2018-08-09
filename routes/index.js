@@ -15,14 +15,12 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/api/v1/todos', (req, res, next) => {
-  Item.find({}, function(err, items) {
-    console.log(items);
+  Item.find({}, function(err, items) {    
     return res.json(items);
   });
 });
 router.post('/api/v1/todos', (req, res, next) => {
- // create a sample task
- console.log(req.body);
+ // create a sample task 
  var nick = new Item({ 
   description: req.body.description, 
   offer: req.body.offer  
@@ -30,8 +28,7 @@ router.post('/api/v1/todos', (req, res, next) => {
 nick.save(function(err) {
   if (err) throw err;
   console.log('Task saved successfully');
-  Item.find({}, function(err, items) {
-    console.log(items);
+  Item.find({}, function(err, items) {  
   return res.json(items);
   });  
 }); 
